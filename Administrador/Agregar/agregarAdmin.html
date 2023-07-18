@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/Actividad/Administrador/Agregar/agregarA.css">
+    <link rel="stylesheet" href="/Actividad/templates/navbar.css">
+    <title>Agregar Pelicula</title>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="/Actividad/pelimarket.png">
+    </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="/Actividad/Administrador/indexAdmin.html">Inicio</a></li>
+      <li><a href="/Actividad/Administrador/Editar/indexEditar.html">Editar Película</a></li>
+      <li><a href="/Actividad/Administrador/Eliminar/indexEliminar.html">Eliminar Película</a></li>
+      <li><a href="/Actividad/Administrador/Buscar/Cbuscar.php">Buscar</a></li>
+    </ul>
+  </nav> 
+</header>
+  <form class="formulario" method="post" action="/Actividad/Administrador/Agregar/CAgregar.php">
+    
+    <h1 class="h1">Añadir Pelicula</h1>
+     <div class="contenedor">
+
+         <div class="input-contenedor">
+         <i class="fas fa-envelope icon"></i>
+         <input type="text" placeholder="Titulo" name="titulo"  id="titulo">  
+         </div>
+         
+         <div class="input-contenedor">
+          <i class="fas fa-envelope icon"></i>
+          <input type="text" placeholder="Genero" name="genero"  id="genero">   
+        </div>
+          
+          <div class="input-contenedor">
+            <i class="fas fa-envelope icon"></i>
+            <input type="date" placeholder="Fecha Estreno" name="fecha"  id="fecha" class="fecha-input">
+          </div> 
+
+          <div class="input-contenedor2">
+          <input type="text" placeholder="Sinopsis o Descripcion" name="descripcion"  id="descripcion" class="desc-input">    
+          </div> 
+
+          <div class="input-contenedor2">
+          <input type="text" placeholder="precio" name="precio"  id="precio" class="desc-input">    
+          </div> 
+
+          <div class="input-contenedor2">
+            <input type="text" placeholder="renta" name="renta"  id="renta" class="desc-input">    
+            </div> 
+  
+          <div class="input-contenedor2">
+          <input type="text" placeholder="URL Portada" name="imagen"  id="imagen">   
+          </div> 
+
+         <input type="submit" value="Agregar" class="button">
+        
+         <p>¿Añadir usuario?<a class="link" href="/Actividad/Registro/Registro.html">Añadir usuario</a></p>
+  
+     </div>
+  </form>
+     
+    
+</body>
+</html>

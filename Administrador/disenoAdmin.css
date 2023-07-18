@@ -1,0 +1,49 @@
+#Titulo{
+    font-family:Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: rgb(83, 188, 230);
+}
+body{
+    background-color: black; 
+    margin: 0;
+    padding: 0;  
+}
+
+.descripcion{
+    background-color:#402047;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:medium;
+}
+.letra{
+    font-family: Arial, Helvetica, sans-serif;;
+    color:white;
+}
+ 
+  table{
+    color:white;
+    margin-top:5rem;
+    margin-bottom:10 rem;
+    margin-left: auto;
+    margin-right:auto;
+    border:0.2rem solid white;
+
+    border-collapse:separate;
+    empty-cells: hide;
+    border-spacing:1rem;
+    caption-side:bottom;
+  }
+
+  th{
+    margin-top:5rem;
+    margin-bottom:10 rem;
+    margin-left: auto;
+    margin-right:auto;
+    
+    padding:2rem;
+
+    border-collapse:separate;
+    empty-cells: hide;
+    border-spacing:1rem;
+    caption-side:bottom;
+  }
+      

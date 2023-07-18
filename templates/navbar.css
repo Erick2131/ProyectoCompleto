@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;800&display=swap');
+.header{
+  background-color: #5533FF;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 85px;
+  padding: 5px 10%;
+}
+
+.header .logo{
+  cursor: pointer;
+  order: 3;
+  margin-left: auto;
+  z-index:999;
+}
+
+.header .logo img{
+  height: 35px;
+  width: auto;
+  transition: all 0.3s;
+}
+
+.header .logo img:hover{
+  transform: scale(1.2);
+}
+
+.header nav{
+  order: 1;
+}
+
+.header .nav-links{
+  list-style: none;
+}
+
+.header .nav-links li{
+  display: inline-block;
+  padding: 0 20px;    
+}
+
+.header .nav-links li:nth-child(1){
+  padding: 0 20px 0 0;
+}
+
+.header .nav-links li:hover{
+  transform: scale(1.1);
+}
+
+.header .nav-links a{
+  font-size: auto;
+  color: #eceff1;
+  text-decoration: none;    
+}
+
+.header .nav-links li a:hover{
+  color: #ffbc0e;
+}
+
+.header .btn{
+  order: 2;
+}
+
+.header .btn button{
+  margin-left: 20px;
+  font-weight: 700;
+  color: #5533FF;
+  padding: 9px 25px;
+  background: #eceff1;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+
+.header .btn button:hover{
+  background-color: #e2f1f8;
+  color: #ffbc0e;
+  transform: scale(1.1);
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+}
+/*---------------------------------------------------------*/
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #3A25A6;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 85px;
+  padding: 5px 10%;
+  z-index: 999;
+}

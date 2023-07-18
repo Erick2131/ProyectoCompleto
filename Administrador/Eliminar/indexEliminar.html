@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="eliminarAD_CSS.css">
+    <link rel="stylesheet" href="/Actividad/templates/navbar.css">
+    <title>Buscar</title>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="/Actividad/pelimarket.png">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/Actividad/Administrador/indexAdmin.html">Inicio</a></li>
+                <li><a href="/Actividad/Administrador/Agregar/agregarAdmin.html">Agregar Pelicula</a></li>
+                <li><a href="/Actividad/Administrador/Editar/indexEditar.html">Editar Película</a></li>
+                <li><a href="/Actividad/Administrador/Buscar/Cbuscar.php">Buscar</a></li>
+            </ul>
+        </nav>
+    </header>
+    <form class="formulario" method="post" action="/Actividad/Administrador/Agregar/CAgregar.php">
+    <br><br>
+        <h1 class="h1">¿Que deseas eliminar?</h1>
+         <div class="contenedor">
+            <a href="/Actividad/Administrador/Eliminar/eliminarAdmin.php">¿Usuarios?</a><br><br><br>
+            <a href="/Actividad/Administrador/Eliminar/eliminarPeliculas.php">¿Peliculas?</a>
+         </div>
+      </form>
+</body>
+</html>

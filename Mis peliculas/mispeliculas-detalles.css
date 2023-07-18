@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;800&display=swap');
+
+body {
+  background-color: #000;
+}
+
+.movie-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.movie-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 120px;
+}
+
+.movie-details2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.movie-details img {
+  width: 250px;
+  height: 375px;
+  margin-right: 6.25rem;
+}
+
+.movie-info {
+  font-size: 35px;
+  float: right;
+  margin-right: 30px;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.movie-info2 {
+  float: right;
+  margin-right: 10px;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.movie-title {
+  flex: 1;
+  font-size: 2rem;
+  margin-top: 1rem;
+  color: white;
+}
+
+.movie-price {
+  font-size: 24px;
+  margin-top: 20px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.pv {
+  font-size: 24px;
+  margin-top: 20px;
+  color: #56355d;
+}
+.movie-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5rem;
+  margin-left: 10rem;
+  margin-right: 10rem;
+}
+
+.movie-info-details {
+  flex: 1;
+  background-color: #fff;
+  font-family: 'Nunito', sans-serif;
+  text-align: justify;
+  border-radius: 10px;
+  padding: 20px;
+  margin-right: 20px;
+  margin-bottom:10px
+}
+
+.movie-comments-container {
+  flex: 1;
+  margin-left: 2rem;
+  font-family: 'Nunito', sans-serif;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom:10px
+}
+.extra{
+  color:#5533FF;
+}
+/* Boton de like */
+/*.......................................................*/
+.like-button, .dislike-button,.favorite-button {
+  border: none;
+  padding: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  background-color: #eceff1;
+  color: #5533FF;
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s ease 0s;
+  display: inline-flex;
+  margin-right: 10px; /* Espacio entre los botones */
+}
+
+.like-button:hover, .dislike-button:hover , .favorite-button:hover{
+  background-color: #e2f1f8;
+  color: #ffbc0e;
+  transform: scale(1.1);
+}
+.separation{
+  margin-left: 4px;
+}
+.like-icon, .dislike-icon, .favorite-icon {
+  font-size: 1rem;
+  margin-right: 5px;
+}
+/* Precio y boton de añadir al carro */
+
+.add-to-cart-button {
+  background-color: rgb(86, 69, 110);
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-button:hover {
+  background-color: #56355d;
+}
+.favorite-icon {
+  font-size: 1rem;
+  margin-right: 5px;
+}
+
+.movie-rating{
+  display: inline-flex;
+}
+.movie-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+  z-index: -1;
+}
+.btn1{
+    align-items: center;
+    margin-top: 20px;
+    background-color: #eceff1;
+    color: #5533FF;
+    font-weight: 700;
+    padding: 9px 25px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    
+}
+.btn1:hover{
+  background-color: #e2f1f8;
+  color: #ffbc0e;
+  transform: scale(1.1);
+}
+  /*Background*/
+  .movie-info form input[type="submit"] {
+    margin-top: 20px;
+    background-color: #eceff1;
+    color: #5533FF;
+    font-weight: 700;
+    padding: 9px 25px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.movie-info form input[type="submit"]:hover {
+    background-color: #e2f1f8;
+    color: #ffbc0e;
+    transform: scale(1.1);
+}
+
+.movie-info form select {
+  margin-top: 20px;
+  background-color: #eceff1;
+  color: #5533FF;
+  font-weight: 700;
+  padding: 9px 25px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+
+.movie-info form select:hover {
+  background-color: #e2f1f8;
+  color: #ffbc0e;
+}
+
+.movie-info form select option {
+  background-color: #eceff1;
+  color: #5533FF;
+  font-weight: 700;
+  transition: all 0.3s ease 0s;
+  margin-top: 20px;
+}
+
+.movie-info form select option:hover {
+  background-color: #e2f1f8;
+  color: #ffbc0e;
+}
+.select-modalidad {
+  padding: 9px 25px;
+  font-size: 16px;
+  border: 15px;
+  border-radius: 50px;
+  background-color: #eceff1;
+  color: #5533FF;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.select-modalidad:hover {
+  background-color: #e2f1f8;
+  color: #ffbc0e;
+  
+}
+textarea {
+  resize: none; /* Evita que el textarea pueda ser redimensionado */
+  width: 450px; /* Establece el ancho fijo del textarea */
+  height: 100px; /* Establece la altura fija del textarea */
+  overflow: auto; /* Agrega una barra de desplazamiento cuando sea necesario */
+
+}
+/*------------------------------------------------comentario dinamico---*/
+@keyframes desvanecer {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+  .comentarios-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .comentario-dinamico {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  

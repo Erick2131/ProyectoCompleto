@@ -1,0 +1,85 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: url(Wpp.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+}
+/*Sirve para mantener un limite en la informacion que va en la seccion del login*/
+* {
+  box-sizing: border-box;
+}
+.contenedor{
+  width: 100%;
+  padding: 0.938rem;
+  
+}
+.formulario{
+  background: #ffbc0e;
+  margin-top: 9.375rem;
+  padding:0.190rem;
+  margin-bottom: 9.375rem;
+}
+h1{
+  text-align: center;
+  color: #1a2537;
+  padding:2rem;
+  font-size: 2.5rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+input[type="email"]{
+  font-size: 1.25rem;
+  width: 82%;
+  padding: 0.625rem;
+  border: none;
+}
+
+input[type="password"]{
+  font-size: 1.25rem;
+  width: 82%;
+  padding: 0.625rem;
+  border: none;
+}
+.input-contenedor{
+  margin-bottom: 0.938rem;
+  border: 0.188rem solid #aaa;
+  border-radius: 0.188rem;
+}
+.icon{
+  min-width: 3.125rem;
+  text-align: center;
+  color: #999;
+}
+.button{
+  border: none;
+  width: 100%;
+  color: white;
+  font-size: 1.25rem;
+  background:  #1a2537;
+  padding: 0.938rem 1.25rem;
+  border-radius: 0.313rem;
+  cursor: pointer;
+}
+.button:hover{
+  background: cadetblue;
+}
+p{
+  text-align: center;
+}
+.link{
+  text-decoration: none;
+    color: #1a2537;
+  font-weight: 600;
+}
+.link:hover{
+   color: cadetblue;
+}
+@media(min-width:48rem)
+{
+  .formulario{
+      margin: auto;
+      width: 31.25rem;
+      margin-top: 9.375rem;
+      border-radius: 2%;
+  }
+}

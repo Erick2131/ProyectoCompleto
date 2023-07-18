@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="LoginCSS.css">
+    <link rel="stylesheet" href="../templates/navbar.css">
+    <link rel="stylesheet" href="..\templates\estilos.css">
+    <title>Login</title>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="../pelimarket.png" alt="">
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../Peliculas/Productos.html">Peliculas</a></li>
+        <li><a href="../Registro/Registro.html">Registrarse</a></li>
+      </ul>
+    </nav>
+  </header>
+  <form class="formulario" method="post" action="../Login.php">
+  <form class="formulario">
+    
+    <h1 class="h1">Login</h1>
+     <div class="contenedor">
+         
+         <div class="input-contenedor">
+         <i class="fas fa-envelope icon"></i>
+         <input type="email" placeholder="Correo Electronico" name="correo" id="correo">
+         
+         </div>
+         
+         <div class="input-contenedor">
+        <i class="fas fa-key icon"></i>
+         <input type="password" placeholder="Contraseña" name="contrasena" id="contrasena">
+         
+         </div>
+         <button type="submit" value="Login" class="button">
+         <p>Iniciar Sesion</p>
+     </div>
+     <p>Al registrarte, aceptas nuestras Condiciones de uso y Política de privacidad.</p>
+         <p>¿No tienes una cuenta? <a class="link" href="/Act../Registro/Registro.html">Registrate</a></p><br><br>
+    </form>
+  </form>
+</body>
+<script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+<footer class="pie-pagina">
+  <div class="grupo-1">
+      <div class="box">
+          <figure>
+              <a href="#">
+                  <img src="/Actividad/pelimarket.png" alt="Logo de SLee Dw">
+              </a>
+          </figure>
+      </div>
+      <div class="box">
+          <h2>SOBRE NOSOTROS</h2>
+          <p>Bienvenido a nuestra página de películas, donde podrás encontrar los estrenos más recientes a un precio barato para rentar o comprar.</p>
+          
+      </div>
+      <div class="box">
+          <h2>SIGUENOS</h2>
+          <div class="red-social">
+              <a href="#" class="fa fa-facebook"></a>
+              <a href="#" class="fa fa-instagram"></a>
+              <a href="#" class="fa fa-twitter"></a>
+              <a href="#" class="fa fa-youtube"></a>
+          </div>
+      </div>
+  </div>
+  <div class="grupo-2">
+      <small>&copy; 2023 <b>PeliMarket</b> - Todos los Derechos Reservados.</small>
+  </div>
+</footer>
+</html>
