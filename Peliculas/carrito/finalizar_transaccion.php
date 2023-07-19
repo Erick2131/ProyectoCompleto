@@ -1,6 +1,10 @@
 <?php
-require('../fpdf/fpdf.php'); // Incluir la librería FPDF
+require('../../fpdf/fpdf.php'); // Incluir la librería FPDF
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
+require '../../vendor/autoload.php';
+echo 'hola';
 function main() {
   session_start();
   // Obtener los datos enviados desde el formulario
@@ -13,7 +17,8 @@ function main() {
   $total_compra = $_SESSION['total_compra'];
 
   // Guardar la información en la tabla "historial"
-  $id_usuario = $_SESSION['id']; // Obtener el ID del usuario actualmente autenticado
+	$id_usuario = $_SESSION['id'];  
+ // Obtener el ID del usuario actualmente autenticado
 
   $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
 
@@ -33,33 +38,30 @@ function main() {
       $id_historial = mysqli_insert_id($conexion);
 
       // Guardar los detalles de los productos en la tabla "historial_productos"
-foreach ($productos as $producto) {
-  $producto_id = $producto['id'];
-  $precio = $producto['precio'];
+      foreach ($productos as $producto) {
+        $producto_id = $producto['id'];
+        $precio = $producto['precio'];
 
-  $query_detalle = "INSERT INTO historial_productos (id_historial, id_peliculas, precio, id_usuario) VALUES ('$id_historial', '$producto_id', '$precio', '$id_usuario')";
+        $query_detalle = "INSERT INTO historial_productos (id_historial, id_peliculas, precio, id_usuario) VALUES ('$id_historial', '$producto_id', '$precio', '$id_usuario')";
 
-  mysqli_query($conexion, $query_detalle);
-}
+        mysqli_query($conexion, $query_detalle);
+      }
 
-// Desactivar la restricción de clave externa
-$query_desactivar_fk = "SET FOREIGN_KEY_CHECKS = 0";
-mysqli_query($conexion, $query_desactivar_fk);
+      
 
-// Eliminar los productos del carrito
-$query_eliminar_carrito = "DELETE FROM carrito WHERE id_usuario = '$id_usuario'";
-mysqli_query($conexion, $query_eliminar_carrito);
+      // Eliminar los productos del carrito
+      $query_eliminar_carrito = "DELETE FROM carrito WHERE id_usuario = '$id_usuario'";
+      mysqli_query($conexion, $query_eliminar_carrito);
 
-// Volver a activar la restricción de clave externa
-$query_activar_fk = "SET FOREIGN_KEY_CHECKS = 1";
-mysqli_query($conexion, $query_activar_fk);
-// Obtener el correo electrónico del usuario a partir de su ID
-$query_usuario = "SELECT correo FROM usuarios WHERE id = '$id_usuario'";
-$resultado_usuario = mysqli_query($conexion, $query_usuario);
-$row_usuario = mysqli_fetch_assoc($resultado_usuario);
-$correo_usuario = $row_usuario['correo'];
+      // Volver a activar la restricción de clave externa
+      $query_activar_fk = "SET FOREIGN_KEY_CHECKS = 1";
+      mysqli_query($conexion, $query_activar_fk);
 
-// Resto del código...
+      // Obtener el correo electrónico del usuario a partir de su ID
+      $query_usuario = "SELECT correo FROM usuarios WHERE id = '$id_usuario'";
+      $resultado_usuario = mysqli_query($conexion, $query_usuario);
+      $row_usuario = mysqli_fetch_assoc($resultado_usuario);
+      $correo_usuario = $row_usuario['correo'];
 
       // Crear el PDF con el resumen de la compra
       $pdf = new FPDF();
@@ -76,43 +78,39 @@ $correo_usuario = $row_usuario['correo'];
       $pdf->Cell(0, 10, 'Total de compra: ' . $total_compra, 0, 1);
 
       // Guardar el PDF en el servidor
-      $pdfPath = '../pdfs/resumen_compra.pdf';
+      $pdfPath = '../../pdfs/resumen_compra.pdf';
       $pdf->Output($pdfPath, 'F');
 
       // Enviar el correo electrónico con el resumen de la compra en formato PDF
-      $fromEmail = "erick556luna@gmail.com";
-      $toEmail = $correo_usuario; 
-      $subject = "Resumen de la compra";
-      $message = "Adjunto encontrarás el resumen de tu compra.";
+      $mail = new PHPMailer(true);
+      try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'erick556u@gmail.com';
+        $mail->Password = 'lapulga2';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-      $headers = "From: $fromEmail\r\n";
-      $headers .= "Reply-To: $fromEmail\r\n";
-      $headers .= "MIME-Version: 1.0\r\n";
-      $headers .= "Content-Type: multipart/mixed; boundary=\"boundary\"\r\n";
+        $mail->setFrom('erick556u@gmail.com', 'Pelimarket');
+        $mail->addAddress('erick556u@gmail.com', 'Receptor');
 
-      $attachment = chunk_split(base64_encode(file_get_contents($pdfPath)));
-      $filename = "resumen_compra.pdf";
+        $mail->addStringAttachment($pdfPath, 'resumen_compra.pdf');
 
-      $body = "--boundary\r\n";
-      $body .= "Content-Type: text/plain; charset=ISO-8859-1\r\n";
-      $body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-      $body .= "$message\r\n";
-      $body .= "--boundary\r\n";
-      $body .= "Content-Type: application/pdf; name=\"$filename\"\r\n";
-      $body .= "Content-Transfer-Encoding: base64\r\n";
-      $body .= "Content-Disposition: attachment; filename=\"$filename\"\r\n\r\n";
-      $body .= "$attachment\r\n";
-      $body .= "--boundary--";
+        $mail->isHTML(true);
+        $mail->Subject = 'Resumen de la compra';
+        $mail->Body = 'Adjunto encontrarás el resumen de tu compra.';
 
-      if (mail($toEmail, $subject, $body, $headers)) {
+        $mail->send();
+
         // Eliminar el archivo PDF después de enviar el correo
-        unlink($pdfPath);
+        
 
         // Redirigir al usuario a una página de confirmación o agradecimiento
-        header("Location: ../Peliculas/confirmacion.php");
+        header("Location: /index.html");
         exit();
-      } else {
-        echo "Error al enviar el correo electrónico.";
+      } catch (Exception $e) {
+        echo "Error al enviar el correo electrónico: " . $mail->ErrorInfo;
       }
     } else {
       echo "Error al registrar la transacción: " . mysqli_error($conexion);
@@ -167,3 +165,5 @@ function getSelectedProducts($id_usuario)
 
 // Llamada a la función main para ejecutar el código
 main();
+?>
+

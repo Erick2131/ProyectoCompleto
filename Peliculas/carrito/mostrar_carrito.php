@@ -15,7 +15,7 @@
   </div>
   <nav>
     <ul class="nav-links">
-      <li><a href="../Peliculas/Productos.php">Atras</a></li>
+      <li><a href="../Productos.php">Atras</a></li>
     </ul>
   </nav>
   </header>
@@ -89,7 +89,7 @@ mysqli_close($conexion);
 
     // Ejemplo de llamada AJAX utilizando jQuery.ajax():
     $.ajax({
-      url: '../Peliculas/carrito/eliminar.php',
+      url: '../carrito/eliminar.php',
       method: 'POST',
       data: { id_compra: idPelicula },
       success: function (response) {
