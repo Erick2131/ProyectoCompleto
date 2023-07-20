@@ -5,6 +5,10 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require '../../vendor/autoload.php';
+require'../../PHPMailer/src/PHPMailer.php';
+require'../../PHPMailer/src/SMTP.php';
+require'../../PHPMailer/src/Exception.php';
+
 echo 'hola';
 function main() {
   session_start();
@@ -88,12 +92,12 @@ function main() {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'erick556u@gmail.com';
-        $mail->Password = 'lapulga2';
+        $mail->Username = 'erick556luna@gmail.com';
+        $mail->Password = 'jhtpzlydoampldan';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        $mail->setFrom('erick556u@gmail.com', 'Pelimarket');
+        $mail->setFrom('erick556luna@gmail.com', 'Pelimarket');
         $mail->addAddress('erick556u@gmail.com', 'Receptor');
 
         $mail->addStringAttachment($pdfPath, 'resumen_compra.pdf');
@@ -108,7 +112,7 @@ function main() {
         
 
         // Redirigir al usuario a una página de confirmación o agradecimiento
-        header("Location: /index.html");
+        header("Location: ../Peliculas/confirmacion.php");
         exit();
       } catch (Exception $e) {
         echo "Error al enviar el correo electrónico: " . $mail->ErrorInfo;
