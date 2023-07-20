@@ -1,6 +1,7 @@
 <?php
 require('../../fpdf/fpdf.php'); // Incluir la librería FPDF
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require '../../vendor/autoload.php';
