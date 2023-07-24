@@ -9,25 +9,19 @@ require'../../PHPMailer/src/PHPMailer.php';
 require'../../PHPMailer/src/SMTP.php';
 require'../../PHPMailer/src/Exception.php';
 
-echo 'hola';
 function main() {
   session_start();
   // Obtener los datos enviados desde el formulario
   $metodo_pago2 = $_POST['metodo_pago'];
 
   // Obtener los productos seleccionados del formulario
-  $productos = getSelectedProducts($_SESSION['id']); // Pasar el ID de usuario como parámetro
+  $productos = getSelectedProducts($conexion, $_SESSION['id']); // Pasar el ID de usuario como parámetro
 
   // Realizar cálculos adicionales, como sumar el precio de los productos comprados
   $total_compra = $_SESSION['total_compra'];
 
   // Guardar la información en la tabla "historial"
-	$id_usuario = $_SESSION['id'];  
- // Obtener el ID del usuario actualmente autenticado
-$query_correo = "SELECT correo FROM usuario WHERE id = '$id_usuario'";
-$resultado_correo = mysqli_query($conexion, $query_correo);
-$row_correo = mysqli_fetch_assoc($resultado_correo);
-$correo_destinatario = $row_correo['correo'];
+  $id_usuario = $_SESSION['id'];
 
   $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
 
@@ -56,21 +50,7 @@ $correo_destinatario = $row_correo['correo'];
         mysqli_query($conexion, $query_detalle);
       }
 
-      
-
-      // Eliminar los productos del carrito
-      $query_eliminar_carrito = "DELETE FROM carrito WHERE id_usuario = '$id_usuario'";
-      mysqli_query($conexion, $query_eliminar_carrito);
-
-      // Volver a activar la restricción de clave externa
-      $query_activar_fk = "SET FOREIGN_KEY_CHECKS = 1";
-      mysqli_query($conexion, $query_activar_fk);
-
-      // Obtener el correo electrónico del usuario a partir de su ID
-      $query_usuario = "SELECT correo FROM usuarios WHERE id = '$id_usuario'";
-      $resultado_usuario = mysqli_query($conexion, $query_usuario);
-      $row_usuario = mysqli_fetch_assoc($resultado_usuario);
-      $correo_usuario = $row_usuario['correo'];
+      // ...
 
       // Crear el PDF con el resumen de la compra
       $pdf = new FPDF();
@@ -113,8 +93,7 @@ $correo_destinatario = $row_correo['correo'];
         $mail->send();
 
         // Eliminar el archivo PDF después de enviar el correo
-        
-	
+
         // Redirigir al usuario a una página de confirmación o agradecimiento
         header("Location: ../confirmacion.php");
         exit();
@@ -133,7 +112,7 @@ $correo_destinatario = $row_correo['correo'];
 }
 
 // Función para obtener los productos seleccionados del formulario
-function getSelectedProducts($id_usuario)
+function getSelectedProducts($conexion, $id_usuario)
 {
   // Conectarse a la base de datos
   $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
@@ -176,3 +155,4 @@ function getSelectedProducts($id_usuario)
 main();
 ?>
 
+   
