@@ -21,74 +21,25 @@ function main() {
   // Realizar cálculos adicionales, como sumar el precio de los productos comprados
   $total_compra = $_SESSION['total_compra'];
 
-  // Guardar la información en la tabla "historial"
-	$id_usuario = $_SESSION['id'];  
- // Obtener el ID del usuario actualmente autenticado
-$query_correo = "SELECT correo FROM usuario WHERE id = '$id_usuario'";
-$resultado_correo = mysqli_query($conexion, $query_correo);
-$row_correo = mysqli_fetch_assoc($resultado_correo);
-$correo_destinatario = $row_correo['correo'];
-
-  $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
-
-  if (mysqli_connect_errno()) {
-    echo "Error al conectar a la base de datos: " . mysqli_connect_error();
-    exit();
+  // Resto del código...
+  
+  // Crear el PDF con el resumen de la compra
+  $pdf = new FPDF();
+  $pdf->AddPage();
+  $pdf->SetFont('Arial', 'B', 16);
+  $pdf->Cell(0, 10, 'Resumen de la compra', 0, 1);
+  $pdf->Ln(10);
+  $pdf->SetFont('Arial', '', 12);
+  $pdf->Cell(0, 10, 'Productos comprados:', 0, 1);
+  foreach ($productos as $producto) {
+    $pdf->Cell(0, 10, '- Producto ID: ' . $producto['id'] . ', Titulo: '. $producto['titulo']. ', Precio: ' . $producto['precio'], 0, 1);
   }
+  $pdf->Ln(10);
+  $pdf->Cell(0, 10, 'Total de compra: ' . $total_compra, 0, 1);
 
-  if (is_numeric($total_compra) && is_numeric($metodo_pago2)) {
-    // Realizar la inserción en la tabla "historial"
-    $query = "INSERT INTO historial (id_usuario, total_compra, fecha_compra, id_mp) VALUES ('$id_usuario', '$total_compra', NOW(), '$metodo_pago2')";
-
-    if (mysqli_query($conexion, $query)) {
-      // La inserción fue exitosa, puedes continuar con las siguientes acciones
-
-      // Obtener el ID del historial recién insertado
-      $id_historial = mysqli_insert_id($conexion);
-
-      // Guardar los detalles de los productos en la tabla "historial_productos"
-      foreach ($productos as $producto) {
-        $producto_id = $producto['id'];
-        $precio = $producto['precio'];
-
-        $query_detalle = "INSERT INTO historial_productos (id_historial, id_peliculas, precio, id_usuario) VALUES ('$id_historial', '$producto_id', '$precio', '$id_usuario')";
-
-        mysqli_query($conexion, $query_detalle);
-      }
-
-      
-
-      // Eliminar los productos del carrito
-      $query_eliminar_carrito = "DELETE FROM carrito WHERE id_usuario = '$id_usuario'";
-      mysqli_query($conexion, $query_eliminar_carrito);
-
-      // Volver a activar la restricción de clave externa
-      $query_activar_fk = "SET FOREIGN_KEY_CHECKS = 1";
-      mysqli_query($conexion, $query_activar_fk);
-
-      // Obtener el correo electrónico del usuario a partir de su ID
-      $query_usuario = "SELECT correo FROM usuarios WHERE id = '$id_usuario'";
-      $resultado_usuario = mysqli_query($conexion, $query_usuario);
-      $row_usuario = mysqli_fetch_assoc($resultado_usuario);
-      $correo_usuario = $row_usuario['correo'];
-
-      // Crear el PDF con el resumen de la compra
-      $pdf = new FPDF();
-      $pdf->AddPage();
-      $pdf->SetFont('Arial', 'B', 16);
-      $pdf->Cell(0, 10, 'Resumen de la compra', 0, 1);
-      $pdf->Ln(10);
-      $pdf->SetFont('Arial', '', 12);
-      $pdf->Cell(0, 10, 'Productos comprados:', 0, 1);
-      foreach ($productos as $producto) {
-        $pdf->Cell(0, 10, '- Producto ID: ' . $producto['id'] . ', Titulo: '. $producto['titulo']. ', Precio: ' . $producto['precio'], 0, 1);
-      }
-      $pdf->Ln(10);
-      $pdf->Cell(0, 10, 'Total de compra: ' . $total_compra, 0, 1);
-
-      // Guardar el PDF en el servidor
-      $pdfPath = '../../pdfs/resumen_compra.pdf';
-      $pdf->Output($pdfPath, 'F');
+  // Guardar el PDF en el servidor
+  $pdfPath = '../../pdfs/resumen_compra.pdf';
+  $pdf->Output($pdfPath, 'F');
 
       // Enviar el correo electrónico con el resumen de la compra en formato PDF
       $mail = new PHPMailer();
@@ -175,5 +126,3 @@ function getSelectedProducts($id_usuario)
 // Llamada a la función main para ejecutar el código
 main();
 ?>
-
-   
