@@ -13,7 +13,11 @@ function main() {
   session_start();
   // Obtener los datos enviados desde el formulario
   $metodo_pago2 = $_POST['metodo_pago'];
-
+ $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
+if (mysqli_connect_errno()) {
+    echo "Error al conectar a la base de datos: " . mysqli_connect_error();
+    exit();
+  }
   // Obtener los productos seleccionados del formulario
   $productos = getSelectedProducts($conexion, $_SESSION['id']); // Pasar el ID de usuario como parámetro
 
@@ -23,7 +27,7 @@ function main() {
   // Guardar la información en la tabla "historial"
   $id_usuario = $_SESSION['id'];
 
-  $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
+  
 
   if (mysqli_connect_errno()) {
     echo "Error al conectar a la base de datos: " . mysqli_connect_error();
