@@ -24,6 +24,10 @@ function main() {
   // Guardar la información en la tabla "historial"
 	$id_usuario = $_SESSION['id'];  
  // Obtener el ID del usuario actualmente autenticado
+$query_correo = "SELECT correo FROM usuario WHERE id = '$id_usuario'";
+$resultado_correo = mysqli_query($conexion, $query_correo);
+$row_correo = mysqli_fetch_assoc($resultado_correo);
+$correo_destinatario = $row_correo['correo'];
 
   $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
 
@@ -98,7 +102,7 @@ function main() {
         $mail->Port = 587;
 
         $mail->setFrom('erick556luna@gmail.com', 'Pelimarket');
-        $mail->addAddress('erick556u@gmail.com', 'Receptor');
+        $mail->addAddress('erick556luna@gmail.com', 'Receptor');
 
         $mail->addStringAttachment($pdfPath, 'resumen_compra.pdf');
 
@@ -110,9 +114,9 @@ function main() {
 
         // Eliminar el archivo PDF después de enviar el correo
         
-
+	
         // Redirigir al usuario a una página de confirmación o agradecimiento
-        header("Location: ../Peliculas/confirmacion.php");
+        header("Location: ../confirmacion.php");
         exit();
       } catch (Exception $e) {
         echo "Error al enviar el correo electrónico: " . $mail->ErrorInfo;
