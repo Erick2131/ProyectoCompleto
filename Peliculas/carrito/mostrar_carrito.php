@@ -16,6 +16,7 @@
   <nav>
     <ul class="nav-links">
       <li><a href="../Productos.php">Atras</a></li>
+	<li><a href="https://10.0.0.4/">Facturas</a></li>
     </ul>
   </nav>
   </header>

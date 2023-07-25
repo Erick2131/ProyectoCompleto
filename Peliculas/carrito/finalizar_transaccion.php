@@ -1,138 +1,169 @@
 <?php
-session_start();
-$total_compra = $_SESSION['total_compra'];
+try{
 
-// Realizar la conexión a la base de datos
-$servername = "localhost";
-$username = "erick";
-$password = "12345";
-$dbname = "pelimarket";
-
-$con = mysqli_connect($servername, $username, $password, $dbname);
-if (!$con) {
-    die("Error al conectar a la base de datos: " . mysqli_connect_error());
-}
-
-include '../php/Conexion.php';
+require('../../fpdf/fpdf.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+require '../../vendor/autoload.php';
+require '../../PHPMailer/src/PHPMailer.php';
+require '../../PHPMailer/src/SMTP.php';
+require '../../PHPMailer/src/Exception.php';
 
-require "../../vendor/autoload.php";
-require('../../fpdf/fpdf.php');
-require('../../PHPMailer/src/PHPMailer.php');
-require('../../PHPMailer/src/SMTP.php');
-require('../../PHPMailer/src/Exception.php');
+function main() {
+  session_start();
 
+  // Obtener los datos enviados desde el formulario
+  $metodo_pago2 = $_POST['metodo_pago'];
 
-$id_usuario = $_SESSION['id']; // Cambio de $_SESSION['id_usuario'] a $_SESSION['id']
-$nombre = $_SESSION['nombre'];
-$telefono = $_SESSION['telefono'];
-$correo = $_SESSION['correo'];
-$productos = json_decode($_SESSION["productos"]);
-$producto = $productos[0]->nombre_producto;
+  // Obtener los productos seleccionados del formulario
+  $productos = getSelectedProducts($_SESSION['id']); // Pasar el ID de usuario como parámetro
 
+  // Realizar cálculos adicionales, como sumar el precio de los productos comprados
+  $total_compra = $_SESSION['total_compra'];
 
-$sql_carrito = "SELECT * FROM carrito WHERE id_usuario = $id_usuario";
-$resultado_carrito = $con->query($sql_carrito);
+  // Guardar la información en la tabla "historial"
+  $id_usuario = $_SESSION['id'];
+  // Obtener el ID del usuario actualmente autenticado
+  $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
 
+  if (mysqli_connect_errno()) {
+    echo "Error al conectar a la base de datos: " . mysqli_connect_error();
+    exit();
+  }
 
-// Crear un nuevo objeto FPDF
-$pdf = new FPDF();
+  if (is_numeric($total_compra) && is_numeric($metodo_pago2)) {
+    // Realizar la inserción en la tabla "historial"
+    $query = "INSERT INTO historial (id_usuario, total_compra, fecha_compra, id_mp) VALUES ('$id_usuario', '$total_compra', NOW(), '$metodo_pago2')";
 
+    if (mysqli_query($conexion, $query)) {
+      // La inserción fue exitosa, puedes continuar con las siguientes acciones
 
-// Agregar una nueva página al PDF
-$pdf->AddPage();
+      // Obtener el ID del historial recién insertado
+      $id_historial = mysqli_insert_id($conexion);
 
+      // Eliminar los productos del carrito
+      $query_eliminar_carrito = "DELETE FROM carrito WHERE id_usuario = '$id_usuario'";
+      mysqli_query($conexion, $query_eliminar_carrito);
 
-// Generar el contenido del PDF
-$pdf->SetFont('Arial', 'B', 18);
-$pdf->Cell(0, 10, 'Este mensaje ha sido enviado por Pelimarket', 0, 1);
-$pdf->Ln(10);
-$pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(0, 10, 'Para: ' . $nombre, 0, 1);
-$pdf->Cell(0, 10, 'Telefono: ' . $telefono, 0, 1);
-$pdf->Cell(0, 10, 'Peliculas:', 0, 1);
+      // Volver a activar la restricción de clave externa
+      $query_activar_fk = "SET FOREIGN_KEY_CHECKS = 1";
+      mysqli_query($conexion, $query_activar_fk);
 
+      // Obtener el correo electrónico del usuario a partir de su ID
+      $query_usuario = "SELECT correo FROM usuarios WHERE id = '$id_usuario'";
+      $resultado_usuario = mysqli_query($conexion, $query_usuario);
+      $row_usuario = mysqli_fetch_assoc($resultado_usuario);
+      $correo_usuario = $row_usuario['correo'];
 
-if ($resultado_carrito && $resultado_carrito->num_rows > 0) {
-    while ($fila_carrito = mysqli_fetch_assoc($resultado_carrito)) {
-        // Obtener los datos específicos del carrito
-        $id_producto = $fila_carrito['id_producto'];
-        // Otros campos del carrito
+      // Crear el PDF con el resumen de la compra
+      $pdf = new FPDF();
+      $pdf->AddPage();
+      $pdf->SetFont('Arial', 'B', 16);
+      $pdf->Cell(0, 10, 'Resumen de la compra', 0, 1);
+      $pdf->Ln(10);
+      $pdf->SetFont('Arial', '', 12);
+      $pdf->Cell(0, 10, 'Productos comprados:', 0, 1);
+      foreach ($productos as $producto) {
+        $pdf->Cell(0, 10, '- Producto ID: ' . $producto['id'] . ', Titulo: '. $producto['titulo']. ', Precio: ' . $producto['precio'], 0, 1);
+      }
+      $pdf->Ln(10);
+      $pdf->Cell(0, 10, 'Total de compra: ' . $total_compra, 0, 1);
 
+      // Guardar el PDF en el servidor con un nombre único (fecha + correo del usuario)
+      $pdfFileName = 'resumen_compra_' . date("Ymd_His") . '_' . $correo_usuario . '.pdf';
+      $pdfPath = '../../pdfs/' . $pdfFileName;
+      $pdf->Output($pdfPath, 'F');
+	
+	
+      // Enviar el correo electrónico con el resumen de la compra en formato PDF
+      $mail = new PHPMailer();
+      try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'erick556luna@gmail.com';
+        $mail->Password = 'jhtpzlydoampldan';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-        // Consultar la información del producto a partir de su ID
-        $sql_producto = "SELECT titulo FROM productos WHERE id = $id_producto";
-        $resultado_producto = $con->query($sql_producto);
-        if ($resultado_producto && $resultado_producto->num_rows > 0) {
-            $fila_producto = mysqli_fetch_assoc($resultado_producto);
-            $titulo_producto = $fila_producto['titulo'];
+        $mail->setFrom('erick556luna@gmail.com', 'Pelimarket');
+        $mail->addAddress($correo_usuario, 'Receptor');
 
+        $mail->addStringAttachment($pdfPath, $pdfFileName);
 
-            // Agregar los datos del carrito al PDF
-            $pdf->Cell(0, 10, "\t\t$titulo_producto", 0, 1);
-            // Agregar otros campos del carrito al PDF
+        $mail->isHTML(true);
+        $mail->Subject = 'Resumen de la compra';
+        $mail->Body = 'Adjunto encontrarás el resumen de tu compra.';
+
+        $mail->send();
+
+        // Eliminar el archivo PDF después de enviar el correo
+        if (file_exists($pdfPath)) {
+          unlink($pdfPath);
         }
-    }
-}
 
-
-$fecha = date('l jS \of F Y h:i:s A');
-$pdf->Cell(0, 10, 'Fecha: ' . $fecha, 0, 1);
-$pdf->Cell(0, 10, 'Total: $' . $total_compra, 0, 1); // Usar $total_compra en lugar de $total
-
-
-// Guardar el PDF en el servidor
-$pdfPath = '../pdf/orden_' . $id_usuario . '.pdf';
-$pdf->Output($pdfPath, 'F');
-
-
-// Definir los encabezados del correo electrónico
-$mail = new PHPMailer();
-$mail->CharSet = 'utf-8';
-$mail->Host = "smtp.gmail.com";
-$mail->From = " 'erick556luna@gmail.com'";
-$mail->IsSMTP();
-$mail->SMTPAuth = true;
-$mail->Username = " 'erick556luna@gmail.com'";
-$mail->Password = "jhtpzlydoampldan";
-$mail->Port = 587;
-$mail->AddAddress($correo);
-$mail->SMTPDebug = 0;
-$mail->isHTML(true);
-$mail->Subject = 'Gracias por la Compra!';
-$mail->Body = '<b>Este es el recibo de tu compra:)</b>';
-$mail->AltBody = 'Hemos enviado el recibo';
-
-
-$inMailFileName = "recibo.pdf";
-$filePath = "../pdf/orden_" . $id_usuario . ".pdf";
-$mail->AddAttachment($filePath, $inMailFileName);
-
-
-$mail->send();
-
-
-// Actualizar el total en la tabla 'historial' para el usuario actual
-$query = "INSERT INTO historial (id_usuario, total_compra) VALUES ('$id_usuario', '$total_compra')";
-$sql_query = mysqli_query($con, $query);
-
-
-if ($sql_query) {
-    $query = "DELETE FROM carrito WHERE id_usuario = $id_usuario";
-    $sql_query = mysqli_query($con, $query);
-
-
-    if ($sql_query) {
+        // Redirigir al usuario a una página de confirmación o agradecimiento
         header("Location: ../confirmacion.php");
+        exit();
+      } catch (Exception $e) {
+        echo "Error al enviar el correo electrónico: " . $mail->ErrorInfo;
+      }
     } else {
-        echo "Error al comprar.";
+      echo "Error al registrar la transacción: " . mysqli_error($conexion);
     }
-} else {
-    echo "Error al registrar la transacción: " . mysqli_error($con);
+  } else {
+    echo "Error: El total de la compra no es un valor numérico.";
+  }
+
+  // Cerrar la conexión a la base de datos
+  mysqli_close($conexion);
 }
 
+// Función para obtener los productos seleccionados del formulario
+function getSelectedProducts($id_usuario)
+{
+  // Conectarse a la base de datos
+  $conexion = mysqli_connect("localhost", "erick", "12345", "pelimarket");
 
+  if (mysqli_connect_errno()) {
+    echo "Error al conectar a la base de datos: " . mysqli_connect_error();
+    exit();
+  }
+
+  // Consultar los productos en la tabla "carrito" para el usuario actual
+  $query_productos = "SELECT c.id_peliculas, p.titulo, c.precio FROM carrito c INNER JOIN peliculas p ON c.id_peliculas = p.id_peliculas WHERE c.id_usuario = '$id_usuario'";
+  $resultado_productos = mysqli_query($conexion, $query_productos);
+
+  $productos = [];
+
+  // Obtener los detalles de los productos seleccionados
+  while ($fila = mysqli_fetch_assoc($resultado_productos)) {
+    $producto_id = $fila['id_peliculas'];
+    $titulo = $fila['titulo'];
+    $precio = $fila['precio'];
+
+    // Guardar los detalles del producto en el arreglo
+    $producto = [
+      'id' => $producto_id,
+      'titulo' => $titulo,
+      'precio' => $precio
+    ];
+
+    $productos[] = $producto;
+  }
+
+  // Cerrar la conexión a la base de datos
+  mysqli_close($conexion);
+
+  // Retornar el arreglo de productos
+  return $productos;
+}
+
+// Llamada a la función main para ejecutar el código
+main();
+
+}catch (Exception $e) {
+    echo "Excepción atrapada en la conexión a la base de datos: " . $e->getMessage();}
 ?>
