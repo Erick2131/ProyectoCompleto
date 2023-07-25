@@ -5,17 +5,7 @@ $total_compra = $_SESSION['total_compra'];
 // Realizar la conexión a la base de datos
 $servername = "localhost";
 $username = "erick";
-$password = "12345"
-$dbname = "pelimarket";
-
-$con = mysqli_connect($servername, $username, $password, $dbname);
-if (!$con) {
-    die("Error al conectar a la base de datos: " . mysqli_connect_error());
-}
-// Realizar la conexión a la base de datos
-$servername = "localhost";
-$username = "erick";
-$password = "12345"
+$password = "12345";
 $dbname = "pelimarket";
 
 $con = mysqli_connect($servername, $username, $password, $dbname);
