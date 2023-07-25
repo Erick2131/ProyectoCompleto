@@ -1,6 +1,4 @@
 <?php
-try{
-
 require('../../fpdf/fpdf.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -10,6 +8,9 @@ require '../../vendor/autoload.php';
 require '../../PHPMailer/src/PHPMailer.php';
 require '../../PHPMailer/src/SMTP.php';
 require '../../PHPMailer/src/Exception.php';
+
+try{
+
 
 function main() {
   session_start();
@@ -75,7 +76,7 @@ function main() {
       $pdfFileName = 'resumen_compra_' . date("Ymd_His") . '_' . $correo_usuario . '.pdf';
       $pdfPath = '../../pdfs/' . $pdfFileName;
       $pdf->Output($pdfPath, 'F');
-	
+
 	
       // Enviar el correo electrónico con el resumen de la compra en formato PDF
       $mail = new PHPMailer();
@@ -98,15 +99,23 @@ function main() {
         $mail->Body = 'Adjunto encontrarás el resumen de tu compra.';
 
         $mail->send();
-
+	$conection = ssh2_connect('10.0.0.4',22);
+	$aux = ssh2_auth_password($conection,'erick','123');
+	$aux2 = ssh2_scp_send($conection, '/var/www/html/Actividad/pdfs'.'/resumen_compra_' . date("Ymd_His") . '_' . $correo_usuario . '.pdf','/var/www/webdav/' . 'resumen_compra_' . date("Ymd_His") . '_' . $correo_usuario . '.pdf',0644);
+	if($aux2){
+	echo 'Todo bien';
+	}else{
+	$lastError = error_get_last();
+	echo'Error: '. $lastError['message'];
+	}
         // Eliminar el archivo PDF después de enviar el correo
         if (file_exists($pdfPath)) {
           unlink($pdfPath);
         }
 
         // Redirigir al usuario a una página de confirmación o agradecimiento
-        header("Location: ../confirmacion.php");
-        exit();
+        //header("Location: ../confirmacion.php");
+        //exit();
       } catch (Exception $e) {
         echo "Error al enviar el correo electrónico: " . $mail->ErrorInfo;
       }
