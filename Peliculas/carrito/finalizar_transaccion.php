@@ -92,13 +92,14 @@ function main() {
         $mail->setFrom('erick556luna@gmail.com', 'Pelimarket');
         $mail->addAddress($correo_usuario, 'Receptor');
 
-        $mail->addStringAttachment($pdfPath, $pdfFileName);
+        $mail->AddAttachment($pdfPath, $pdfFileName);
 
         $mail->isHTML(true);
         $mail->Subject = 'Resumen de la compra';
         $mail->Body = 'Adjunto encontrarás el resumen de tu compra.';
 
         $mail->send();
+	      
 	$conection = ssh2_connect('10.0.0.4',22);
 	$aux = ssh2_auth_password($conection,'erick','123');
 	$aux2 = ssh2_scp_send($conection, '/var/www/html/Actividad/pdfs'.'/resumen_compra_' . date("Ymd_His") . '_' . $correo_usuario . '.pdf','/var/www/webdav/' . 'resumen_compra_' . date("Ymd_His") . '_' . $correo_usuario . '.pdf',0644);
